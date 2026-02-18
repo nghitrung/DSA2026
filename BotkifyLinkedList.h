@@ -142,8 +142,9 @@ template <class T>
 void BotkifyLinkedList<T>::clear(){
     Node *currNode = this->head->next;
     while (currNode != nullptr) {
+        Node *nextNode = currNode->next;
         delete currNode;
-        currNode = currNode->next;
+        currNode = nextNode;
     }
 
     this->head->next = nullptr;

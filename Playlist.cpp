@@ -120,8 +120,11 @@ Song* Playlist::playPrevious()
 {
     // TODO: Student implementation
     if (this->empty()) throw out_of_range("Index is invalid!");
-    if (this->currentIndex <= 0) this->currentIndex = this->size() - 1;
-    this->currentIndex = this->currentIndex--;
+    if (this->currentIndex <= 0) {
+        this->currentIndex = this->size() - 1;
+    } else {
+        this->currentIndex--;
+    }
     return this->getSong(this->currentIndex);
 }
 
