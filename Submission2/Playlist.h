@@ -2,7 +2,18 @@
 #define PLAYLIST_H
 
 #include "main.h"
-#include "BotkifyLinkedList.h"
+
+#include <utility> // pair
+#include <string>
+// If implement ThreadedAVL, compile with -DUSE_THREADED_AVL
+#ifdef USE_THREADED_AVL
+#include "ThreadedAVL.h"
+#else
+#include "AVL.h"
+#endif
+
+// Key for ordering songs by alphabet (title), tie-break by id
+using SongKey = pair<string, int>; // (title, id)
 
 // =======================
 // Class Song
@@ -22,6 +33,8 @@ private:
     int score;
     string url;
 
+    int play_count;
+
 public:
     Song(int id,
          string title,
@@ -31,11 +44,9 @@ public:
          int score,
          string url);
 
-    int getID() const;
-    int getDuration() const;
-    int getScore() const;
-
     string toString() const;
+
+    // TODO: Student can add more methods if needed
 };
 
 // =======================
@@ -49,16 +60,28 @@ class Playlist
 
 private:
     string name;
-    BotkifyLinkedList<Song*> lstSong;
+    int size;
     int currentIndex;
 
-    Song** songCache;
-    void updateCache();
+#ifdef USE_THREADED_AVL
+    ThreadedAVL<SongKey, Song*> songs;
+    ThreadedAVL<SongKey, Song*>::Iterator currentIt;
+    bool hasCurrent;
+#else
+    AVL<SongKey, Song*> songs;
+#endif
+
+private:
+    SongKey makeKey(Song* s) const;
+    void resetPlayback();
 
 public:
     Playlist(string name);
 
-    int size() const;
+    Playlist(const Playlist&) = delete;
+    Playlist& operator=(const Playlist&) = delete;
+
+    int getSize() const;
     bool empty() const;
     void clear();
 
@@ -66,18 +89,15 @@ public:
     void removeSong(int index);
     Song* getSong(int index) const;
 
+    // Continuous playback
     Song* playNext();
     Song* playPrevious();
 
     int getTotalScore();
-    bool compareTo(Playlist p, int numSong);
+    bool compareTo(const Playlist& p, int numSong);
 
     void playRandom(int index);
     int playApproximate(int step);
-
-    // HELPER FUNCTION
-    string playRandomResult(int index); // for testing
-    int getSize() const {return this->size();} // for testing
 };
 
 #endif // PLAYLIST_H
