@@ -62,6 +62,72 @@ public:
 protected:
     Node* pRoot;
 
+    // HELPER FUNCTION
+
+    int getHeight(Node* node) {
+        if (node == NULL) return 0;
+
+        int lh = this->getHeight(node->pLeft);
+        int rh = this->getHeight(node->pRight);
+        return ((lh > rh ? lh : rh) + 1);
+    }
+
+    // Update balance factor
+    void updateBF(Node* node) {
+        if (node) node->bfactor = getHeight(node->pLeft) - getHeight(node->pRight);
+    }
+
+    Node* rotateRight(Node* root) {
+        Node* L = root->pLeft;
+        root->pLeft = L->pRight;
+        L->pRight = root;
+        updataBF(root);
+        updateBF(L);
+
+        return L;
+    } 
+
+    Node* rotateLeft(Node* root) {
+        Node* R = root->pRight;
+        root->pRight = R->pLeft;
+        R->pLeft = root;
+        updateBF(root);
+        updateBF(R);
+
+        return R;
+    }
+
+    Node* balance(Node* node) {
+        updateBF(node);
+
+        if (node->bfactor > 1) {
+            if (getHeight(node->pLeft->pLeft) < getHeight(node->pLeft->pRight)) 
+                node->pLeft = rotateLeft(node->pLeft); 
+            return rotateRight(node);
+        } 
+
+        if (node->bfactor < -1) {
+            if (getBalance(node->pRight->pRight) < getHeight(node->pRight->pLeft)) 
+                node->pRight = rotateRight(node->pRight);
+            return rotateLeft(node); 
+        }
+
+        return node;
+    }
+
+    void findPredSucc(Node* root, const K& key, Node*& pred, Node*& succ) {
+        Node* curr = root;
+        while (curr) {
+            if (key < curr->key) {
+                succ = curr;
+                curr = curr->pLeft;
+            } else if (key > curr->key) {
+                pred = curr;
+                curr = curr->pRight;
+            } else return;
+        }
+    }
+
 protected:
     // =======================
     // Hooks for ThreadedAVL
@@ -75,7 +141,20 @@ protected:
     // Factory for subclasses to create extended node types
     virtual Node* createNode(const K& key, const V& value) { return new Node(key, value); }
 
-  
+private:
+    Node* insert(Node* node, const K& key, const V& value, bool& res, Node*& newNode) {
+        if (!node) {
+            newNode = createNode(key, value);
+            res = true;
+            return newNode;
+        }
+
+        if (key < node->key) node->pLeft = insert(node->pLeft, key, value, res, newNode);
+        else if (key > node->key) node->pRight = insert(node->pRight, key, value, res, newNode);
+        else { res = false; return node; }
+        return balance(node);
+    }
+
 public:
     AVL() : pRoot(nullptr) {}
     virtual ~AVL() { clear(); }
@@ -86,8 +165,12 @@ public:
 
     bool insert(const K& key, const V& value) override {
         // TODO
-        (void)key; (void)value;
-        return false;
+        bool res = false;
+        Node* newNode = nullptr, *pred = nullptr, *succ = nullptr;
+        findPredSucc(pRoot, key, pred, succ);
+        pRoot = insert(pRoot, key, value, res, newNode);
+        if (res) onInserted(newNode, pred, succ);
+        return res;
     }
 
     bool erase(const K& key) override {
