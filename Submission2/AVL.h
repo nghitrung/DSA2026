@@ -155,6 +155,58 @@ private:
         return balance(node);
     }
 
+    Node* erase(Node* node, const K& key, bool& res) {
+        if (!node) {
+            res = false;
+            return nullptr;
+        }
+
+        if (key < node->key) node->pLeft = erase(node->pLeft, key, res);
+        else if (key > node->key) node->pRight = erase(node->pRight, key, res);
+        else {
+            res = true;
+            if (!node->pLeft || !node->pRight) {
+                node* temp = node->pLeft ? node->pLeft: node->pRight;
+
+                onErasing(noed, nullptr, nullptr);
+                delete node;
+                return temp;
+            } else {
+                Node* s = node->pRight;
+                while (s->pLeft) s = s->pLeft;
+                Node* sNext = s->pRight;
+                onReplaceBySuccessor(node, s, sNext);
+                node->key = s->key;
+                node->value = s->value;
+                node->pRight = erase(node->pRight, s->key, res);
+            }
+        }
+
+        return balance(node);
+    }
+
+    void clear (Node* node) {
+        if (node) {
+            clear(node->pLeft);
+            clear(node->pRight);
+            delete node;
+        }
+    }
+
+    void inOrder(Node* node, std::list<K>& l) {
+        if (!node) return;
+        inOrder(node->pLeft, l);
+        l.push_back(node->key);
+        inOrder(node->pRight, l);
+    }
+
+    void revOrder(Node* node, std::list<K>& l) {
+        if (!node) return;
+        revOrder(node->pRight, l);
+        l.push_back(node->key);
+        revOrder(node->pLeft, l);
+    }
+
 public:
     AVL() : pRoot(nullptr) {}
     virtual ~AVL() { clear(); }
@@ -175,49 +227,67 @@ public:
 
     bool erase(const K& key) override {
         // TODO
-        (void)key;
-        return false;
+        bool res = false;
+        pRoot = erase(pRoot, key, res);
+
+        return res;
     }
 
     V* find(const K& key) override {
         // TODO
-        (void)key;
+        Node* curr = pRoot;
+        while (curr) {
+            if (key == curr->key) return &(curr->value);
+            curr = (key < curr->key) ? curr->pLeft : curr->pRight;
+        }
         return nullptr;
     }
 
     bool contains(const K& key) const override {
         // TODO
-        (void)key;
+        Node* curr = pRoot;
+        while (curr) {
+            if (key == curr->key) return true;
+            curr = (key < curr->key) ? curr->pLeft : curr->pRight;
+        }
         return false;
     }
 
     int size() const override {
         // TODO
-        return 0;
+        std::list<K> l;
+        const_cast<AVL*>(this)->inOrder(pRoot, l);
+        return (int)l.size();
     }
 
     bool empty() const override {
         // TODO
-        return true;
+        return pRoot == nullptr;
     }
 
     void clear() override {
         // TODO
+        clear(pRoot); 
+        pRoot = nullptr;
     }
 
     int height() const override {
         // TODO
-        return 0;
+        return getHeight(pRoot);
     }
 
     std::list<K> ascendingList() override {
         // TODO
-        return {};
+        std::list<K> l;
+        inOrder(pRoot, l);
+        return l;
     }
 
     std::list<K> descendingList() override {
         // TODO
-        return {};
+        std::list<K> l;
+        revOrder(pRoot, l);
+        return l;
     }
 
     std::string toString(std::string (*entry2str)(const K&, const V&) = nullptr) const override {
