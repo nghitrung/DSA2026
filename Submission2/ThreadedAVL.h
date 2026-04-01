@@ -57,13 +57,26 @@ public:
 
     // TODO: These should traverse via threading (O(n) but very fast in practice)
     std::list<K> ascendingList() override {
-        // TODO
-        return {};
+        std::list<K> res;
+        TNode* curr = head_;
+        while (curr) {
+            res.push_back(curr->AVLNode::key);
+            curr = curr->next;
+        }
+
+        return res;
     }
 
     std::list<K> descendingList() override {
         // TODO
-        return {};
+        std::list<K> res;
+        TNode* curr = tail_;
+        while (curr) {
+            res.push_back(curr->AVLNode::key);
+            curr = curr->prev;
+        }
+
+        return res;
     }
 
     void clear() override {
@@ -77,9 +90,15 @@ public:
     Iterator endIt() { return Iterator(nullptr); }
     Iterator rbeginIt() { return Iterator(tail_); }
 
-    Iterator findIt(const K& /*key*/) {
+    Iterator findIt(const K& key) {
         // TODO: return iterator to node by key
-        return Iterator(nullptr);
+        AVLNode* curr = this->pRoot;
+        while (curr) {
+            if (key == curr->key) return Iterator(static_cast<TNode*>(curr));
+            if (key < curr->key) curr = curr->pLeft;
+            else curr = curr->pRight;
+        }
+        return endIt();
     }
 
 protected:
@@ -90,24 +109,55 @@ protected:
     }
 
     // TODO: maintain threading on insertion
-    void onInserted(AVLNode* /*newNode*/,
-                    AVLNode* /*pred*/,
-                    AVLNode* /*succ*/) override {
+    void onInserted(AVLNode* newNode,
+                    AVLNode* pred,
+                    AVLNode* succ) override {
         // TODO
+        TNode* tNew = static_cast<TNode*>(newNode);
+        TNode* tPred = static_cast<TNode*>(pred);
+        TNode* tSucc = static_cast<TNode*>(succ);
+
+        tNew->prev = tPred;
+        tNew->next = tSucc;
+
+        if (tPred) tPred->next = tNew;
+        else head_ = tNew;
+
+        if (tSucc) tSucc->prev = tNew;
+        else tail_ = tNew;
     }
 
     // TODO: maintain threading on deletion (0/1 child case)
-    void onErasing(AVLNode* /*delNode*/,
-                   AVLNode* /*pred*/,
-                   AVLNode* /*succ*/) override {
+    void onErasing(AVLNode* delNode,
+                   AVLNode* pred,
+                   AVLNode* succ) override {
         // TODO
+        TNode* tDel = static_cast<TNode*>(delNode);
+        TNode* p = tDel->prev;
+        TNode* s = tDel->next;
+
+        if (p) p->next = s;
+        else head_ = s;
+
+        if (s) s->prev = p;
+        else tail_ = p;
     }
 
     // TODO: maintain threading when deleting a node with 2 children
     void onReplaceBySuccessor(AVLNode* /*target*/,
-                              AVLNode* /*successor*/,
+                              AVLNode* succ,
                               AVLNode* /*successorNext*/) override {
         // TODO
+        TNode* tSucc = static_cast<TNode*>(succ);
+        TNode* p = tSucc->prev;
+        TNode* s = tSucc->next;
+
+        if (p) p->next = s;
+        else head_ = s;
+
+        if (s) s->prev = p;
+        else tail_ = p;
+
     }
 };
 

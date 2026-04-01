@@ -6,6 +6,12 @@
 #include <list>
 #include <string>
 
+template <typename T1, typename T2>
+std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
+    os << "(" << p.first << ", " << p.second << ")";
+    return os;
+}
+
 template <typename K, typename V>
 class AVL : public IBST<K, V> {
 public:
@@ -57,6 +63,10 @@ public:
             }
             return out.str();
         }
+
+        int balance() const {
+            return bfactor;
+        }
     };
 
 protected:
@@ -64,12 +74,10 @@ protected:
 
     // HELPER FUNCTION
 
-    int getHeight(Node* node) {
-        if (node == NULL) return 0;
+    int getHeight(Node* node) const {
+        if (!node) return 0;
 
-        int lh = this->getHeight(node->pLeft);
-        int rh = this->getHeight(node->pRight);
-        return ((lh > rh ? lh : rh) + 1);
+        return getHeight(node->pLeft) - getHeight(node->pRight);
     }
 
     // Update balance factor
@@ -81,7 +89,7 @@ protected:
         Node* L = root->pLeft;
         root->pLeft = L->pRight;
         L->pRight = root;
-        updataBF(root);
+        updateBF(root);
         updateBF(L);
 
         return L;
@@ -107,7 +115,7 @@ protected:
         } 
 
         if (node->bfactor < -1) {
-            if (getBalance(node->pRight->pRight) < getHeight(node->pRight->pLeft)) 
+            if (getHeight(node->pRight->pRight) < getHeight(node->pRight->pLeft)) 
                 node->pRight = rotateRight(node->pRight);
             return rotateLeft(node); 
         }
@@ -166,9 +174,9 @@ private:
         else {
             res = true;
             if (!node->pLeft || !node->pRight) {
-                node* temp = node->pLeft ? node->pLeft: node->pRight;
+                Node* temp = node->pLeft ? node->pLeft: node->pRight;
 
-                onErasing(noed, nullptr, nullptr);
+                onErasing(node, nullptr, nullptr);
                 delete node;
                 return temp;
             } else {
@@ -273,7 +281,7 @@ public:
 
     int height() const override {
         // TODO
-        return getHeight(pRoot);
+        return getHeight(this->pRoot);
     }
 
     std::list<K> ascendingList() override {
