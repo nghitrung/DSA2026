@@ -75,9 +75,11 @@ protected:
     // HELPER FUNCTION
 
     int getHeight(Node* node) const {
-        if (!node) return 0;
+        if (node == nullptr) return 0;
+        int lh = getHeight(node->pLeft);
+        int rh = getHeight(node->pRight);
 
-        return getHeight(node->pLeft) - getHeight(node->pRight);
+        return (1 + (lh > rh ? lh : rh));
     }
 
     // Update balance factor

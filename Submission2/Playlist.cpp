@@ -149,23 +149,27 @@ Song* Playlist::playNext() {
 #ifdef USE_THREADED_AVL
     if (!hasCurrent) {
         currentIt = songs.beginIt();
+        if (currentIt.isNull()) return nullptr;
+
         hasCurrent = true;
-        currentIndex = 0;
-    } else {
-        ++currentIt;
-        currentIndex++;
-        if (currentIt.isNull()) {
-            resetPlayback();
-            return nullptr;
-        }
-    }
-    return currentIt.value();
-#else
+        currentIndex = -1;
+        return currentIt.value();
+    } 
+
+    ++currentIt;
     currentIndex++;
-    if (currentIndex >= size) {
+    if (currentIt.isNull() || currentIndex >= size) {
         resetPlayback();
         return nullptr;
     }
+    return currentIt.value();
+    
+#else
+    if (currentIndex + 1 >= size) {
+        resetPlayback();
+        return nullptr;
+    }
+    currentIndex++;
     return getSong(currentIndex);
 #endif
 }
