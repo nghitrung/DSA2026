@@ -44,9 +44,10 @@ Playlist::Playlist(string name)
     // TODO
 }
 
-SongKey Playlist::makeKey(Song* /*s*/) const {
+SongKey Playlist::makeKey(Song* s) const {
     // TODO
-    return SongKey("", 0);
+    if (!s) return {"", -1};
+    return {s->getTitle(), s->getID()};
 }
 
 void Playlist::resetPlayback() {
@@ -70,19 +71,71 @@ bool Playlist::empty() const {
 
 void Playlist::clear() {
     // TODO: delete Song* if Playlist owns them + clear the tree
+    std::list<SongKey> keys = songs.ascendingList();
+    for (const auto& key : keys) {
+        Song** sPtr = songs.find(key);
+        if (sPtr && *sPtr) {
+            delete *sPtr;
+        }
+    }
+
+    songs.clear();
+    size = 0;
+    resetPlayback();
 }
 
-void Playlist::addSong(Song* /*s*/) {
+void Playlist::addSong(Song* s) {
     // TODO
+    if (!s) return;
+    if (songs.insert(makeKey(s), s)) {
+        size++;
+    }
 }
 
-void Playlist::removeSong(int /*index*/) {
+void Playlist::removeSong(int index) {
     // TODO
+    if (index < 0 || index >= size) return;
+
+    std::list<SongKey> keys = songs.ascendingList();
+    auto it = keys.begin();
+    std::advance(it, index);
+    
+    Song** sPtr = songs.find(*it);
+
+    if (sPtr && *sPtr) {
+        if (currentIndex == index) resetPlayback();
+        else if (index < currentIndex) currentIndex--;
+
+        delete *sPtr;
+        songs.erase(*it);
+        size--;
+    }
 }
 
-Song* Playlist::getSong(int /*index*/) const {
+Song* Playlist::getSong(int index) const {
     // TODO
-    return nullptr;
+
+    if (index < 0 || index >= size) return nullptr;
+#ifdef USE_THREADED_AVL
+    std::list<SongKey> keys = const_cast<ThreadedAVL<SongKey, Song*>&>(songs).ascendingList();
+#else
+    std::list<SongKey> keys = const_cast<AVL<SongKey, Song*>&>(songs).ascendingList();
+#endif
+
+    if (index >= (int)keys.size()) return nullptr;
+
+    auto it = keys.begin();
+    for (int i = 0; i < index; i++) {
+        ++it;
+    }
+
+#ifdef USE_THREADED_AVL
+    Song** sPtr = const_cast<ThreadedAVL<SongKey, Song*>&>(songs).find(*it);
+#else
+    Song** sPtr = const_cast<AVL<SongKey, Song*>&>(songs).find(*it);
+#endif
+
+    return (sPtr != nullptr) ? *sPtr : nullptr;
 }
 
 // =======================
@@ -91,12 +144,54 @@ Song* Playlist::getSong(int /*index*/) const {
 
 Song* Playlist::playNext() {
     // TODO
-    return nullptr;
+    if (empty()) return nullptr;
+
+#ifdef USE_THREADED_AVL
+    if (!hasCurrent) {
+        currentIt = songs.beginIt();
+        hasCurrent = true;
+        currentIndex = 0;
+    } else {
+        ++currentIt;
+        currentIndex++;
+        if (currentIt.isNull()) {
+            resetPlayback();
+            return nullptr;
+        }
+    }
+    return currentIt.value();
+#else
+    currentIndex++;
+    if (currentIndex >= size) {
+        resetPlayback();
+        return nullptr;
+    }
+    return getSong(currentIndex);
+#endif
 }
 
 Song* Playlist::playPrevious() {
     // TODO
+    if (empty() || currentIndex <= 0) {
+        resetPlayback();
+        return nullptr;
+    }
+
+#ifdef USE_THREADED_AVL
+    if (hasCurrent) {
+        --currentIt;
+        currentIndex--;
+        if (currentIt.isNull()) {
+            resetPlayback();
+            return nullptr;
+        }
+        return currentIt.value();
+    }
     return nullptr;
+#else
+    currentIndex--;
+    return getSong(currentIndex);
+#endif
 }
 
 // =======================
@@ -105,23 +200,48 @@ Song* Playlist::playPrevious() {
 
 int Playlist::getTotalScore() {
     // TODO
-    return 0;
+    int total = 0;
+    std::list<SongKey> keys = songs.ascendingList();
+    for (const auto& key : keys) {
+        Song** sPtr = songs.find(key);
+        if (sPtr && *sPtr) total += (*sPtr)->getScore(); 
+    }
+    return total;
 }
 
-bool Playlist::compareTo(const Playlist& /*p*/, int /*numSong*/) {
+bool Playlist::compareTo(const Playlist& p, int numSong) {
     // TODO
-    return false;
+    int score1 = 0, score2 = 0;
+    for (int i = 0; i < numSong; i++) {
+        Song* s1 = this->getSong(i);
+        if (s1) score1 += s1->getScore();
+        
+        Song* s2 = p.getSong(i);
+        if (s2) score2 += s2->getScore();
+    }
+    return score1 >= score2;
 }
 
 // =======================
 // Advanced playing modes (TODO)
 // =======================
 
-void Playlist::playRandom(int /*index*/) {
+void Playlist::playRandom(int index) {
     // TODO
+    if (index < 0 || index >= size) return;
+    currentIndex = index;
+#ifdef USE_THREADED_AVL
+    currentIt = songs.findIt(*(std::next(songs.ascendingList().begin(), index)));
+    hasCurrent = !currentIt.isNull();
+#endif
 }
 
-int Playlist::playApproximate(int /*step*/) {
+int Playlist::playApproximate(int step) {
     // TODO
-    return -1;
+    int newIndex = currentIndex + step;
+    if (newIndex < 0) newIndex = 0;
+    if (newIndex >= size) newIndex = size - 1;
+    
+    playRandom(newIndex);
+    return currentIndex;
 }

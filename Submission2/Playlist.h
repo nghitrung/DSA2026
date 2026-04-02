@@ -47,6 +47,10 @@ public:
     string toString() const;
 
     // TODO: Student can add more methods if needed
+
+    int getID() const { return id; }   
+    string getTitle() const { return title; }
+    int getScore() const { return score; }
 };
 
 // =======================
