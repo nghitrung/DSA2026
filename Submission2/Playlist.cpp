@@ -22,8 +22,18 @@ Song::Song(int id,
 {
 }
 
-string Song::toString() const {
-   return title + " by " + artist + " from " + album + " [" + to_string(duration) + "s, score: " + to_string(score) + "]";
+std::string Song::toString() const {
+    std::ostringstream oss;
+    oss << "Song[id=" << id 
+        << ", title=\"" << title << "\""
+        << ", artist=\"" << artist << "\""
+        << ", album=\"" << album << "\""
+        << ", duration=" << duration
+        << ", score=" << score
+        << ", url=\"" << url << "\""
+        << ", play_count=" << play_count
+        << "]";
+    return oss.str();
 }
 
 // TODO: Student can implement additional methods for Song here
@@ -143,57 +153,59 @@ Song* Playlist::getSong(int index) const {
 // =======================
 
 Song* Playlist::playNext() {
-    // TODO
     if (empty()) return nullptr;
 
 #ifdef USE_THREADED_AVL
-    if (!hasCurrent) {
+    if (!hasCurrent) { 
         currentIt = songs.beginIt();
-        if (currentIt.isNull()) return nullptr;
-
+        currentIndex = 0;
         hasCurrent = true;
-        currentIndex = -1;
-        return currentIt.value();
-    } 
-
-    ++currentIt;
-    currentIndex++;
-    if (currentIt.isNull() || currentIndex >= size) {
-        resetPlayback();
-        return nullptr;
+    } else {
+        ++currentIt;
+        currentIndex++;
+        if (currentIt.isNull()) { 
+            currentIt = songs.beginIt();
+            currentIndex = 0;
+        }
     }
     return currentIt.value();
-    
 #else
-    if (currentIndex + 1 >= size) {
-        resetPlayback();
-        return nullptr;
-    }
     currentIndex++;
+
+    if (currentIndex >= size) {
+        currentIndex = 0;
+    }
+
     return getSong(currentIndex);
 #endif
 }
 
 Song* Playlist::playPrevious() {
-    // TODO
-    if (empty() || currentIndex <= 0) {
-        resetPlayback();
-        return nullptr;
+    if (empty()) {
+        return nullptr; 
     }
 
 #ifdef USE_THREADED_AVL
-    if (hasCurrent) {
+    if (!hasCurrent) {
+        currentIt = songs.rbeginIt();
+        currentIndex = size - 1;
+        hasCurrent = true;
+    } else {
         --currentIt;
         currentIndex--;
         if (currentIt.isNull()) {
-            resetPlayback();
-            return nullptr;
+            currentIt = songs.rbeginIt();
+            currentIndex = size - 1;
         }
-        return currentIt.value();
     }
-    return nullptr;
+    return currentIt.value();
 #else
     currentIndex--;
+
+    if (currentIndex < 0 ) {
+        currentIndex = size - 1;
+    }
+
     return getSong(currentIndex);
 #endif
 }
@@ -242,7 +254,9 @@ void Playlist::playRandom(int index) {
 
 int Playlist::playApproximate(int step) {
     // TODO
-    int newIndex = currentIndex + step;
+    int startIdx = (currentIndex == -1) ? 0 : currentIndex;
+    int newIndex = startIdx + step;
+
     if (newIndex < 0) newIndex = 0;
     if (newIndex >= size) newIndex = size - 1;
     

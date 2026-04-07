@@ -5,10 +5,11 @@
 
 #include <list>
 #include <string>
+#include <sstream>
 
-template <typename T1, typename T2>
-std::ostream& operator<<(std::ostream& os, const std::pair<T1, T2>& p) {
-    os << "(" << p.first << ", " << p.second << ")";
+
+inline std::ostream& operator<<(std::ostream& os, const pair<string, int>& key) {
+    os << "(" << key.first << ", " << key.second << ")";
     return os;
 }
 
@@ -30,7 +31,8 @@ public:
 
         virtual ~Node() = default;
 
-        // Default formatter must compile for any K,V.
+        int balance() { return bfactor; }
+
         static std::string defaultEntry2Str(const K& k, const V& v) {
             std::ostringstream oss;
             oss << "<" << k << ", " << v << ">";
@@ -203,14 +205,14 @@ private:
         }
     }
 
-    void inOrder(Node* node, std::list<K>& l) {
+    void inOrder(Node* node, std::list<K>& l) const {
         if (!node) return;
         inOrder(node->pLeft, l);
         l.push_back(node->key);
         inOrder(node->pRight, l);
     }
 
-    void revOrder(Node* node, std::list<K>& l) {
+    void revOrder(Node* node, std::list<K>& l) const {
         if (!node) return;
         revOrder(node->pRight, l);
         l.push_back(node->key);
@@ -266,7 +268,7 @@ public:
     int size() const override {
         // TODO
         std::list<K> l;
-        const_cast<AVL*>(this)->inOrder(pRoot, l);
+        inOrder(pRoot, l);
         return (int)l.size();
     }
 
@@ -286,15 +288,13 @@ public:
         return getHeight(this->pRoot);
     }
 
-    std::list<K> ascendingList() override {
-        // TODO
+    std::list<K> ascendingList() const override {
         std::list<K> l;
         inOrder(pRoot, l);
         return l;
     }
 
-    std::list<K> descendingList() override {
-        // TODO
+    std::list<K> descendingList() const override {
         std::list<K> l;
         revOrder(pRoot, l);
         return l;

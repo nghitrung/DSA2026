@@ -31,6 +31,9 @@ private:
     TNode* tail_; // largest
 
 public:
+    TNode* getHead() const { return head_; }
+    TNode* getTail() const { return tail_; }
+
     class Iterator {
         friend class ThreadedAVL<K, V>;
         TNode* p_;
@@ -56,7 +59,7 @@ public:
     ~ThreadedAVL() override { this->clear(); }
 
     // TODO: These should traverse via threading (O(n) but very fast in practice)
-    std::list<K> ascendingList() override {
+    std::list<K> ascendingList() const override {
         std::list<K> res;
         TNode* curr = head_;
         while (curr) {
@@ -67,8 +70,7 @@ public:
         return res;
     }
 
-    std::list<K> descendingList() override {
-        // TODO
+    std::list<K> descendingList() const override {
         std::list<K> res;
         TNode* curr = tail_;
         while (curr) {
