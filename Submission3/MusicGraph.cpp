@@ -41,7 +41,7 @@ void MusicGraph::printSongInfo(const string& id) const {
     // TODO: Print the song information in the required format
     int idx = getSongIndex(id);
     if (idx != -1) {
-        cout << "[" << songsList[idx].data.id << "]" 
+        cout << "[" << songsList[idx].data.id << "] " 
              << songsList[idx].data.title << " - "
              << songsList[idx].data.artist;
     }
@@ -74,7 +74,7 @@ void MusicGraph::recommendRelatedSongs(const string& startId) const {
                 visited.push_back(edge.target);
                 customQueue.push_back(edge.target);
 
-                cout << " -> ";
+                cout << "-> ";
                 printSongInfo(edge.target);
                 cout << endl;
             }
@@ -97,7 +97,7 @@ void MusicGraph::generatePlaylistsByClusters() const {
         if (!isVisited(node.vertex, globalVisited)) {
             playlistCount++;
 
-            cout << "===Playlist " << playlistCount << "===\n";
+            cout << "=== Playlist " << playlistCount << " ===\n";
 
             vector<string> localQueue;
             int localHead = 0;
@@ -107,7 +107,7 @@ void MusicGraph::generatePlaylistsByClusters() const {
 
             while (localHead < (int)localQueue.size()) {
                 string currentId = localQueue[localHead++];
-                cout << " * ";
+                cout << "  * ";
                 printSongInfo(currentId);
                 cout << endl;
 
@@ -174,10 +174,10 @@ void MusicGraph::findSmoothTransition(const string& startId, const string& endId
     }
 
     if (dist[endIdx] == INF) {
-        cout << "No transition path between these two songs. \n";
+        cout << "No transition path between these two songs.\n";
     } else {
-        cout << " -> Total Deviation (Cost): " << dist[endIdx] << endl;
-        cout << " -> Playback Order: \n";
+        cout << "-> Total Deviation (Cost): " << dist[endIdx] << endl;
+        cout << "-> Playback Order:\n";
 
         vector<int> path;
         for (int at = endIdx; at != -1; at = prev[at]) {
@@ -186,7 +186,7 @@ void MusicGraph::findSmoothTransition(const string& startId, const string& endId
 
         int step = 1;
         for (int i = (int)path.size() - 1; i >= 0; i--) {
-            cout << "    " << step << ". ";
+            cout << "   " << step++ << ". ";
             printSongInfo(this->adjList[path[i]].vertex);
             cout << endl;
         }
@@ -225,9 +225,9 @@ void MusicGraph::findMostPopularSong() const {
     }
 
     if (maxIdx != -1) {
-        cout << " -> Network Hub Song: \n";
+        cout << "-> Network Hub Song:\n   ";
         printSongInfo(this->adjList[maxIdx].vertex);
-        cout << "\n (In-degree: " << maxIn << ")\n";
+        cout << "\n   (In-degree: " << maxIn << ")\n";
     }
 }
 
@@ -240,44 +240,33 @@ bool MusicGraph::dfsCycleHelper(int idx, vector<bool>& visited, vector<bool>& re
                                  vector<int>& parent, bool& found) const {
     // TODO: Implement the recursive DFS logic to detect cycles
     if (found) return true;
-
     visited[idx] = true;
     recursionStack[idx] = true;
 
-    string currentId = this->adjList[idx].vertex;
-    for (const auto& edge : this->getNeighbors(currentId)) {
+    for (const auto& edge : this->adjList[idx].neighbors) {
         int v = this->getVertexIndex(edge.target);
-
         if (!visited[v]) {
             parent[v] = idx;
             if (dfsCycleHelper(v, visited, recursionStack, parent, found)) return true;
         } else if (recursionStack[v]) {
             found = true;
-            cout << " -> Music loop detected!\n -> Loop:\n";
+            cout << "-> Music loop detected!\n-> Loop:\n";
 
             vector<int> cycle;
-            int curr = idx;
-            while (curr != v && curr != -1) {
+            cycle.push_back(v); 
+            for (int curr = idx; curr != v && curr != -1; curr = parent[curr]) {
                 cycle.push_back(curr);
-                curr = parent[curr];
             }
-
-            cycle.push_back(v);
+            cycle.push_back(v); 
 
             for (int i = (int)cycle.size() - 1; i >= 0; i--) {
-                cout << "    ";
+                cout << "   "; 
                 printSongInfo(this->adjList[cycle[i]].vertex);
                 cout << endl;
             }
-
-            cout << "     ";
-            printSongInfo(this->adjList[v].vertex);
-            cout << endl;
-
             return true;
         }
     }
-
     recursionStack[idx] = false;
     return false;
 }
@@ -300,7 +289,7 @@ void MusicGraph::detectMusicLoop() const {
     }
 
     if (!found) {
-        cout << " -> No music loop detected.\n";
+        cout << "No music loop detected.\n";
     }
 
 }
