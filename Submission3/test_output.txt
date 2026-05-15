@@ -1,0 +1,484 @@
+﻿[32mGraph01 PASSED [0m
+[32mGraph02 PASSED [0m
+[32mGraph03 PASSED [0m
+[32mGraph04 PASSED [0m
+[32mGraph05 PASSED [0m
+[32mGraph06 PASSED [0m
+[32mGraph07 PASSED [0m
+[32mGraph08 PASSED [0m
+[32mGraph09 PASSED [0m
+[32mGraph10 PASSED [0m
+[32mGraph11 PASSED [0m
+****************************************************************************
+[31mGraph12 FAILED [0m
+Your result: 
+
+[3] SMOOTHEST TRANSITION (DIJKSTRA)
+From: [K01] Song K1 - Artist K
+To: [K02] Song K2 - Artist K
+-------------------------------------------------
+No transition path between these two songs.
+
+Expected result: 
+
+[3] SMOOTHEST TRANSITION (DIJKSTRA)
+From: [K01] Song K1 - Artist K
+To: [K02] Song K2 - Artist K
+-------------------------------------------------
+No transition path between these two songs.
+****************************************************************************
+
+
+[32mGraph13 PASSED [0m
+****************************************************************************
+[31mGraph14 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [M01] Song M1 - Artist M
+   (In-degree: 2)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [M01] Song M1 - Artist M
+   (In-degree: 2)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph15 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [N01] Song N1 - Artist N
+   (In-degree: 0)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [N01] Song N1 - Artist N
+   (In-degree: 0)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph16 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [O04] Song O4 - Artist O
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [O04] Song O4 - Artist O
+   (In-degree: 3)
+****************************************************************************
+
+
+[32mGraph17 PASSED [0m
+[32mGraph18 PASSED [0m
+[32mGraph19 PASSED [0m
+[32mGraph20 PASSED [0m
+[32mGraph21 PASSED [0m
+[32mGraph22 PASSED [0m
+[32mGraph23 PASSED [0m
+****************************************************************************
+[31mGraph24 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [X01] Popular - X Artist
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [X01] Popular - X Artist
+   (In-degree: 3)
+****************************************************************************
+
+
+[32mGraph25 PASSED [0m
+[32mGraph26 PASSED [0m
+[32mGraph27 PASSED [0m
+[32mGraph28 PASSED [0m
+[32mGraph29 PASSED [0m
+[32mGraph30 PASSED [0m
+[32mGraph31 PASSED [0m
+[32mGraph32 PASSED [0m
+[32mGraph33 PASSED [0m
+[32mGraph34 PASSED [0m
+[32mGraph35 PASSED [0m
+[32mGraph36 PASSED [0m
+[32mGraph37 PASSED [0m
+[32mGraph38 PASSED [0m
+[32mGraph39 PASSED [0m
+[32mGraph40 PASSED [0m
+[32mGraph41 PASSED [0m
+[32mGraph42 PASSED [0m
+[32mGraph43 PASSED [0m
+[32mGraph44 PASSED [0m
+[32mGraph45 PASSED [0m
+[32mGraph46 PASSED [0m
+[32mGraph47 PASSED [0m
+****************************************************************************
+[31mGraph48 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AC02] Song AC1 - Artist AC
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AC02] Song AC1 - Artist AC
+   (In-degree: 3)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph49 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AD05] Song AD4 - Artist AD
+   (In-degree: 2)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AD06] Song AD5 - Artist AD
+   (In-degree: 2)
+****************************************************************************
+
+
+[32mGraph50 PASSED [0m
+[32mGraph51 PASSED [0m
+****************************************************************************
+[31mGraph52 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AE03] Song AE2 - Artist AE
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [AE03] Song AE2 - Artist AE
+   (In-degree: 3)
+****************************************************************************
+
+
+[32mGraph53 PASSED [0m
+[32mGraph54 PASSED [0m
+[32mGraph55 PASSED [0m
+[32mGraph56 PASSED [0m
+[32mGraph57 PASSED [0m
+[32mGraph58 PASSED [0m
+[32mGraph59 PASSED [0m
+[32mGraph60 PASSED [0m
+[32mGraph61 PASSED [0m
+[32mGraph62 PASSED [0m
+[32mGraph63 PASSED [0m
+[32mGraph64 PASSED [0m
+[32mGraph65 PASSED [0m
+[32mGraph66 PASSED [0m
+[32mGraph67 PASSED [0m
+[32mGraph68 PASSED [0m
+[32mGraph69 PASSED [0m
+[32mGraph70 PASSED [0m
+****************************************************************************
+[31mGraph71 FAILED [0m
+Your result: 
+
+[2] CREATE PLAYLIST BY CLUSTERS (CONNECTED COMPONENTS)
+-------------------------------------------------
+=== Playlist 1 ===
+  * [BR01] M1 - Artist BR
+  * [BR02] M2 - Artist BR
+=== Playlist 2 ===
+  * [BR03] M3 - Artist BR
+=== Playlist 3 ===
+  * [BR04] M4 - Artist BR
+  * [BR05] M5 - Artist BR
+
+Expected result: 
+
+[2] CREATE PLAYLIST BY CLUSTERS (CONNECTED COMPONENTS)
+-------------------------------------------------
+=== Playlist 1 ===
+  * [BR01] M1 - Artist BR
+  * [BR02] M2 - Artist BR
+  * [BR03] M3 - Artist BR
+=== Playlist 2 ===
+  * [BR04] M4 - Artist BR
+  * [BR05] M5 - Artist BR
+
+****************************************************************************
+
+
+[32mGraph72 PASSED [0m
+[32mGraph73 PASSED [0m
+[32mGraph74 PASSED [0m
+****************************************************************************
+[31mGraph75 FAILED [0m
+Your result: 
+
+[3] SMOOTHEST TRANSITION (DIJKSTRA)
+From: [BV02] Middle - Artist BV
+To: [BV03] Dead - Artist BV
+-------------------------------------------------
+No transition path between these two songs.
+
+Expected result: 
+
+[3] SMOOTHEST TRANSITION (DIJKSTRA)
+From: [BV02] Middle - Artist BV
+To: [BV03] Dead - Artist BV
+-------------------------------------------------
+No transition path between these two songs.
+****************************************************************************
+
+
+[32mGraph76 PASSED [0m
+[32mGraph77 PASSED [0m
+[32mGraph78 PASSED [0m
+[32mGraph79 PASSED [0m
+[32mGraph80 PASSED [0m
+[32mGraph81 PASSED [0m
+****************************************************************************
+[31mGraph82 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CC01] Hub - Artist CC
+   (In-degree: 5)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CC01] Hub - Artist CC
+   (In-degree: 5)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph83 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CD01] Hub1 - Artist CD
+   (In-degree: 4)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CD01] Hub1 - Artist CD
+   (In-degree: 4)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph84 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CE04] Hub - Artist CE
+   (In-degree: 2)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CE04] Hub - Artist CE
+   (In-degree: 2)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph85 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CF05] Hub - Artist CF
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CF05] Hub - Artist CF
+   (In-degree: 3)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph86 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CG04] Dest - Artist CG
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CG04] Dest - Artist CG
+   (In-degree: 3)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph87 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CH01] HUB - Artist CH
+   (In-degree: 5)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CH01] HUB - Artist CH
+   (In-degree: 5)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph88 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CI01] Center - Artist CI
+   (In-degree: 3)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CI01] Center - Artist CI
+   (In-degree: 3)
+****************************************************************************
+
+
+****************************************************************************
+[31mGraph89 FAILED [0m
+Your result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CJ03] Hub - Artist CJ
+   (In-degree: 4)
+
+Expected result: 
+
+[4] FIND NETWORK HUB SONG (IN-DEGREE)
+-------------------------------------------------
+-> Network Hub Song:
+   [CJ03] Hub - Artist CJ
+   (In-degree: 4)
+****************************************************************************
+
+
+[32mGraph90 PASSED [0m
+[32mGraph91 PASSED [0m
+[32mGraph92 PASSED [0m
+[32mGraph93 PASSED [0m
+[32mGraph94 PASSED [0m
+[32mGraph95 PASSED [0m
+[32mGraph96 PASSED [0m
+[32mGraph97 PASSED [0m
+[32mGraph98 PASSED [0m
+[32mGraph99 PASSED [0m
+[32mGraph100 PASSED [0m
+****************************************************************************
+[31mGraph101 FAILED [0m
+Your result: 
+
+[2] CREATE PLAYLIST BY CLUSTERS (CONNECTED COMPONENTS)
+-------------------------------------------------
+=== Playlist 1 ===
+  * [CU01] Inception - Artist CU
+=== Playlist 2 ===
+  * [CU02] Middle - Artist CU
+=== Playlist 3 ===
+  * [CU03] Dream - Artist CU
+  * [CU04] Reality - Artist CU
+
+Expected result: 
+
+[2] CREATE PLAYLIST BY CLUSTERS (CONNECTED COMPONENTS)
+-------------------------------------------------
+=== Playlist 1 ===
+  * [CU01] Inception - Artist CU
+  * [CU02] Middle - Artist CU
+  * [CU03] Dream - Artist CU
+  * [CU04] Reality - Artist CU
+
+****************************************************************************
+
+
+================================================================================
+Graph Test Result
+Passed Test: 82/101
+Failed Test: 19/101
+================================================================================

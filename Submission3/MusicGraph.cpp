@@ -111,10 +111,21 @@ void MusicGraph::generatePlaylistsByClusters() const {
                 printSongInfo(currentId);
                 cout << endl;
 
+                // Follow outgoing edges
                 for (const auto& edge : this->getNeighbors(currentId)) {
                     if (!isVisited(edge.target, globalVisited)) {
                         globalVisited.push_back(edge.target);
                         localQueue.push_back(edge.target);
+                    }
+                }
+
+                // Follow reverse edges (treat graph as undirected for components)
+                for (int i = 0; i < (int)this->adjList.size(); i++) {
+                    for (const auto& edge : this->adjList[i].neighbors) {
+                        if (edge.target == currentId && !isVisited(this->adjList[i].vertex, globalVisited)) {
+                            globalVisited.push_back(this->adjList[i].vertex);
+                            localQueue.push_back(this->adjList[i].vertex);
+                        }
                     }
                 }
             }
@@ -174,7 +185,7 @@ void MusicGraph::findSmoothTransition(const string& startId, const string& endId
     }
 
     if (dist[endIdx] == INF) {
-        cout << "No transition path between these two songs.\n";
+        cout << "No transition path between these two songs.";
     } else {
         cout << "-> Total Deviation (Cost): " << dist[endIdx] << endl;
         cout << "-> Playback Order:\n";
@@ -218,7 +229,7 @@ void MusicGraph::findMostPopularSong() const {
     int maxIn = -1;
     int maxIdx = -1;
     for (int i = 0; i < n; i++) {
-        if (inDegree[i] > maxIn) {
+        if (inDegree[i] >= maxIn) {
             maxIn = inDegree[i];
             maxIdx = i;
         }
@@ -227,7 +238,7 @@ void MusicGraph::findMostPopularSong() const {
     if (maxIdx != -1) {
         cout << "-> Network Hub Song:\n   ";
         printSongInfo(this->adjList[maxIdx].vertex);
-        cout << "\n   (In-degree: " << maxIn << ")\n";
+        cout << "\n   (In-degree: " << maxIn << ")";
     }
 }
 
